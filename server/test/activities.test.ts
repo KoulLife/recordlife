@@ -61,6 +61,19 @@ test('concurrent starts leave exactly one running', async () => {
   expect(n).toBe(1);
 });
 
+test('a start with an earlier clock never deletes the running record', async () => {
+  // Request B read t2 and won the lock; request A read the earlier t1 and runs second.
+  clock.set('2026-11-20T00:12:02Z');
+  const b = (await (await start('B')).json()) as Activity;
+  clock.set('2026-11-20T00:12:01Z');
+  const res = await start('A');
+  expect(res.status).toBe(201);
+  const rows = await t.db.execute<{ id: string; ended_at: Date | null }>(sql`select id, ended_at from activities`);
+  expect(rows).toHaveLength(2);
+  expect(rows.filter((r) => r.ended_at === null)).toHaveLength(1);
+  expect(rows.find((r) => r.id === b.id)?.ended_at).not.toBeNull();
+});
+
 test('title validation', async () => {
   expect((await start('   ')).status).toBe(400);
   expect((await start('가'.repeat(101))).status).toBe(400);

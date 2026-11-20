@@ -1,5 +1,5 @@
 import { zValidator } from '@hono/zod-validator';
-import { and, eq, isNull, lt, sql } from 'drizzle-orm';
+import { and, eq, isNull, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
 import { titleLength, type Activity, type CurrentResponse } from '@recordlife/shared';
@@ -46,17 +46,20 @@ export function activityRoutes({ db, now }: Deps) {
 
   r.post('/activities/start', zValidator('json', startBody, invalid(400)), async (c) => {
     const { title } = c.req.valid('json');
-    const at = now();
     const row = await db.transaction(async (tx) => {
-      // Serialize starts so concurrent requests never race on the one-running index.
+      // Serialize starts so concurrent requests never race on the one-running index,
+      // and read the clock only once we hold the lock.
       await tx.execute(sql`select pg_advisory_xact_lock(7140001)`);
-      await tx
-        .update(activities)
-        .set({ endedAt: at, updatedAt: at })
-        .where(and(isNull(activities.endedAt), lt(activities.startedAt, at)));
-      // A running activity that started at this same instant has zero length: drop it.
-      await tx.delete(activities).where(isNull(activities.endedAt));
-      const [created] = await tx.insert(activities).values({ title, startedAt: at, createdAt: at, updatedAt: at }).returning();
+      const at = now();
+      let startAt = at;
+      const [running] = await tx.select().from(activities).where(isNull(activities.endedAt)).for('update');
+      if (running) {
+        // Never delete: end it now, or 1ms after its start if our clock is not ahead of it.
+        const endAt = at > running.startedAt ? at : new Date(running.startedAt.getTime() + 1);
+        await tx.update(activities).set({ endedAt: endAt, updatedAt: at }).where(eq(activities.id, running.id));
+        if (endAt > startAt) startAt = endAt;
+      }
+      const [created] = await tx.insert(activities).values({ title, startedAt: startAt, createdAt: at, updatedAt: at }).returning();
       return created;
     });
     return c.json(toActivity(row), 201);
