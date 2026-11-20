@@ -27,17 +27,18 @@ git pull && docker compose up -d --build
 
 ## 폰/다른 PC에서 접속 (Tailscale)
 
+앱과 DB 포트는 노트북 자신(`127.0.0.1`)에만 열려 있습니다. 카페 와이파이 같은 같은 네트워크의 다른 기기에서는 접근할 수 없고, Tailscale을 통해서만 들어옵니다.
+
 1. 노트북과 폰에 [Tailscale](https://tailscale.com/download) 설치 후 같은 계정으로 로그인
-2. 폰에서 `http://<노트북 tailscale 이름 또는 100.x.x.x>:3000`
-3. HTTPS가 필요하면(홈 화면에 앱처럼 추가할 때) 노트북에서:
+2. 노트북에서 한 번 실행 (재부팅 후에도 유지):
 
 ```bash
 tailscale serve --bg 3000
 ```
 
-   → `https://<노트북 이름>.<tailnet>.ts.net` 으로 접속
+3. 폰/다른 PC에서 `https://<노트북 이름>.<tailnet>.ts.net` 으로 접속 (HTTPS라 홈 화면에 앱처럼 추가도 가능)
 
-앱 자체 로그인은 없습니다. 3000 포트를 공유기에서 외부로 열지 마세요. VPN 안에서만 쓰는 전제입니다.
+앱 자체 로그인은 없습니다. tailnet 밖으로 공개하는 `tailscale funnel`은 쓰지 마세요.
 
 ## 백업
 
