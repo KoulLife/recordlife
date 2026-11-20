@@ -36,15 +36,18 @@ export default function DayPage() {
   const isToday = date === today;
   const isFuture = date > today;
 
+  const latest = useRef(0);
   const load = useCallback(async () => {
     if (!valid) return;
+    const req = ++latest.current;
     try {
       const [list, cur] = await Promise.all([api.getDay(date), api.getCurrent()]);
+      if (req !== latest.current) return; // a newer load (other day or refetch) owns the page
       setItems(list);
       setServerNow(cur.serverNow);
       setError(null);
     } catch {
-      setError('기록을 불러오지 못했어요. 다시 시도해 주세요.');
+      if (req === latest.current) setError('기록을 불러오지 못했어요. 다시 시도해 주세요.');
     }
   }, [date, valid]);
 

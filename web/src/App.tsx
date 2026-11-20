@@ -28,16 +28,21 @@ function TopBar() {
   );
 }
 
-export default function App() {
+/** Resolves "today" when the redirect renders, not when App first rendered. */
+function TodayRedirect({ kind }: { kind: 'day' | 'month' }) {
   const today = todayKey(new Date());
+  return <Navigate to={kind === 'day' ? `/day/${today}` : `/month/${today.slice(0, 7)}`} replace />;
+}
+
+export default function App() {
   return (
     <>
       <TopBar />
       <Routes>
         <Route path="/" element={<NowPage />} />
-        <Route path="/day" element={<Navigate to={`/day/${today}`} replace />} />
+        <Route path="/day" element={<TodayRedirect kind="day" />} />
         <Route path="/day/:date" element={<DayPage />} />
-        <Route path="/month" element={<Navigate to={`/month/${today.slice(0, 7)}`} replace />} />
+        <Route path="/month" element={<TodayRedirect kind="month" />} />
         <Route path="/month/:month" element={<MonthPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

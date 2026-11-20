@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router';
 import { formatMinutes, intensity, todayKey, type MonthSummary } from '@recordlife/shared';
 import * as api from '../api';
@@ -17,13 +17,17 @@ export default function MonthPage() {
   const today = todayKey(new Date());
   const thisMonth = today.slice(0, 7);
 
+  const latest = useRef(0);
   const load = useCallback(async () => {
     if (!valid) return;
+    const req = ++latest.current;
     try {
-      setData(await api.getMonth(month));
+      const summary = await api.getMonth(month);
+      if (req !== latest.current) return; // a newer load (other month or refetch) owns the page
+      setData(summary);
       setError(null);
     } catch {
-      setError('기록을 불러오지 못했어요. 다시 시도해 주세요.');
+      if (req === latest.current) setError('기록을 불러오지 못했어요. 다시 시도해 주세요.');
     }
   }, [month, valid]);
 
