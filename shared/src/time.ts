@@ -82,3 +82,32 @@ export function formatClock(d: Date): string {
 export function titleLength(s: string): number {
   return [...s].length;
 }
+
+/** `yyyy-MM-ddTHH:mm` (for `<input type="datetime-local">`) in Asia/Seoul. */
+export function toSeoulInput(d: Date): string {
+  return format(inZone(d), "yyyy-MM-dd'T'HH:mm");
+}
+
+/** Parses a Seoul `yyyy-MM-ddTHH:mm` value; `null` when empty or malformed. */
+export function fromSeoulInput(s: string): Date | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(s);
+  if (!m) return null;
+  const [y, mo, d, h, mi] = m.slice(1).map(Number);
+  return new Date(new TZDate(y, mo - 1, d, h, mi, ZONE).getTime());
+}
+
+/** Day key `n` days away from `day`. */
+export function shiftDay(day: string, n: number): string {
+  const [y, m, d] = day.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d + n));
+  return dt.toISOString().slice(0, 10);
+}
+
+const WEEKDAYS = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+
+/** `11월 20일 금요일`. */
+export function dayLabel(day: string): string {
+  const [y, m, d] = day.split('-').map(Number);
+  const wd = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+  return `${m}월 ${d}일 ${WEEKDAYS[wd]}`;
+}

@@ -9,6 +9,10 @@ import {
   minutesPerDay,
   titleLength,
   todayKey,
+  toSeoulInput,
+  fromSeoulInput,
+  shiftDay,
+  dayLabel,
 } from './index';
 
 const at = (iso: string) => new Date(iso);
@@ -58,4 +62,16 @@ test('formatters', () => {
   expect([84, 40, 360, 0].map(formatMinutes)).toEqual(['1시간 24분', '40분', '6시간', '0분']);
   expect(formatClock(at('2026-11-20T00:12:00Z'))).toBe('09:12');
   expect(titleLength('😀'.repeat(100))).toBe(100);
+});
+
+test('datetime-local conversion uses Seoul', () => {
+  expect(toSeoulInput(at('2026-11-20T00:12:00Z'))).toBe('2026-11-20T09:12');
+  expect(fromSeoulInput('2026-11-20T09:12')).toEqual(at('2026-11-20T00:12:00Z'));
+  expect(fromSeoulInput('')).toBeNull();
+});
+
+test('shiftDay and dayLabel', () => {
+  expect(shiftDay('2026-11-01', -1)).toBe('2026-10-31');
+  expect(shiftDay('2026-12-31', 1)).toBe('2027-01-01');
+  expect(dayLabel('2026-11-20')).toBe('11월 20일 금요일');
 });
