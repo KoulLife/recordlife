@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch --env-file-if-exists=../.env src/index.ts",
-    "build": "tsup src/index.ts --format esm --platform node --target node22 --out-dir dist --noExternal @recordlife/shared",
+    "build": "tsup",
     "start": "node dist/index.js",
     "test": "vitest run",
     "db:generate": "drizzle-kit generate"

@@ -1,5 +1,4 @@
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
@@ -12,8 +11,9 @@ export function createDb(url: string): { db: Db; close(): Promise<void> } {
   return { db: drizzle(client, { schema }), close: () => client.end() };
 }
 
-const defaultMigrations = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../drizzle');
+// Resolved from the working directory: `server/` in dev, `/app` in the container.
+const defaultMigrations = () => path.resolve(process.env.MIGRATIONS_DIR ?? 'drizzle');
 
-export async function runMigrations(db: Db, migrationsFolder = process.env.MIGRATIONS_DIR ?? defaultMigrations) {
+export async function runMigrations(db: Db, migrationsFolder = defaultMigrations()) {
   await migrate(db, { migrationsFolder });
 }
