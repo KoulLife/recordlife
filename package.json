@@ -1,0 +1,10 @@
+{
+  "name": "recordlife",
+  "private": true,
+  "packageManager": "pnpm@10.11.0",
+  "scripts": {
+    "test": "pnpm -r test",
+    "build": "pnpm --filter web build && pnpm --filter server build",
+    "dev": "pnpm --parallel --filter server --filter web dev"
+  }
+}
