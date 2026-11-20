@@ -68,7 +68,7 @@ Inputs는 iOS 자동 확대 방지를 위해 최소 16px.
 
 - **Semantic (iOS system):** success `#34C759` / `#30D158`, warning `#FF9F0A` / `#FFB340`, error `#FF3B30` / `#FF453A`, info `#0A84FF` / `#409CFF`. 알림 배경은 해당 색 12–14% 틴트.
 - **Ember 사용 규칙:** 한 화면에 Ember 요소는 1–2개까지. 장식용으로 쓰지 않는다. 그라디언트 금지.
-- **Dark mode:** 애플 방식. 순수 검정 배경 + `#1C1C1E` 표면. Ember는 살짝 밝게(`#FF7A4A`). 시스템 설정을 따르되 사용자 수동 전환 지원.
+- **Dark mode:** 없음. 라이트 모드만 쓴다 (`color-scheme: light`). 표의 Dark 열은 참고용으로만 남긴다.
 
 ## Spacing
 - **Base unit:** 4px
@@ -99,7 +99,11 @@ Inputs는 iOS 자동 확대 방지를 위해 최소 16px.
 - **Input:** surface-2 배경, 테두리 없음, 포커스 시 Ember 1.5px inset ring
 - **Segmented control:** surface-2 트랙 + surface 선택 칩
 - **Toggle:** iOS 51×31, on = success green
-- **Now:** 진행 중 활동 이름(세리프 26/600) + 타이머(tabular 56px/300, `H:MM:SS`) + `HH:mm 시작` + 종료 버튼(secondary). 아래 입력칸 + 시작 버튼(Ember).
+- **Now (대기):** 날짜(15/600, text-2) + 큰 시계(`HH:mm`, 72–104px/200) + 세리프 질문 `지금, 무엇을 하고 있나요?`.
+- **Now (진행 중):** Ember-soft 칩(맥박 점 + `진행 중 · HH:mm 시작`) + 활동 이름(세리프 26–32/600) + 타이머(56–76px/200) + 흰 pill 종료 버튼(■ 아이콘).
+- **Composer:** 높이 60 pill, surface + 그림자, 세리프 입력, 오른쪽 44px Ember 원형 → 버튼. 포커스 시 Ember 1.5px 링.
+- **Today ribbon:** 24시간 10px 막대(시간 눈금), 기록은 Ember 70%, 진행 중 100%, 현재 시각 2px 표식, 아래 `오늘 N시간 M분 기록했어요`. 누르면 일 보기.
+- **배경:** Now 화면만 상단에서 은은한 Ember 빛(radial, 10% 이하). 진행 중일 때 살짝 더 따뜻하게.
 - **Time block:** surface 배경, `--line` 0.5px 테두리, radius 10, 이름 세리프 + `HH:mm–HH:mm`. 진행 중은 Ember 테두리. 현재 시각선 Ember 1px.
 - **Ember 사용처:** 시작 버튼, 진행 중 표시, 현재 시각선, 월별 원 진하기, 활성 포커스.
 - 일기 미리보기의 연속 기록 카드, 사진 썸네일, 기분 칩은 사용하지 않는다 (design-preview.html은 톤 참고용).
@@ -115,5 +119,6 @@ Inputs는 iOS 자동 확대 방지를 위해 최소 16px.
 ## Decisions Log
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-11-20 | 다크 모드 제거, Now 화면 재디자인(큰 시계, pill 입력, 오늘 리본) | 사용자: 입력칸만 있어 비어 보임, 화이트 모드만 원함 |
 | 2026-11-20 | 제품을 활동 타이머로 전환, 내비게이션을 상단 세그먼트로 | 사용자가 "순간 기록 + 시간 블록" 서비스로 정의. 토큰은 유지, 화면 구성만 변경 |
 | 2026-11-20 | Initial design system created | /design-consultation. 개인 일상 기록, 모바일 우선 웹앱, "애플 느낌" 요청. Day One/Apple Journal 조사 후 애플 문법 + 세리프 본문 + 따뜻한 중립색으로 차별화 |

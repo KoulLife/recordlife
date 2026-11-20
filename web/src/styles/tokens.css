@@ -35,26 +35,5 @@
   --gutter: 20px;
   --col: 640px;
   --hour: 56px;
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #000000;
-    --surface: #1C1C1E;
-    --surface-2: #2C2C2E;
-    --text: #F5F3F0;
-    --text-2: #98938E;
-    --text-3: #5E5A56;
-    --line: #2E2D2B;
-    --ember: #FF7A4A;
-    --ember-soft: #3A1F15;
-    --success: #30D158;
-    --warning: #FFB340;
-    --error: #FF453A;
-    --info: #409CFF;
-    --glass: rgba(30, 30, 32, 0.72);
-    --glass-line: rgba(255, 255, 255, 0.08);
-    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .3);
-  }
+  color-scheme: light;
 }
