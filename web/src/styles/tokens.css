@@ -1,0 +1,60 @@
+/* Design tokens — source of truth: DESIGN.md */
+:root {
+  --bg: #F6F4F1;
+  --surface: #FFFFFF;
+  --surface-2: #EFECE7;
+  --text: #1C1B1A;
+  --text-2: #8A8580;
+  --text-3: #B5B0AA;
+  --line: #E6E2DC;
+  --ember: #F26B3A;
+  --ember-soft: #FDE9E1;
+  --success: #34C759;
+  --warning: #FF9F0A;
+  --error: #FF3B30;
+  --info: #0A84FF;
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-line: rgba(0, 0, 0, 0.06);
+  --shadow: 0 1px 2px rgba(28, 27, 26, .04), 0 8px 24px rgba(28, 27, 26, .06);
+
+  --font-ui: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-serif: "MaruBuri", "Noto Serif KR", serif;
+
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-micro: 150ms;
+  --dur-short: 250ms;
+  --dur-medium: 300ms;
+  --dur-sheet: 450ms;
+
+  --r-tag: 6px;
+  --r-ctl: 10px;
+  --r-btn: 14px;
+  --r-card: 16px;
+  --r-sheet: 24px;
+
+  --gutter: 20px;
+  --col: 640px;
+  --hour: 56px;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --surface: #1C1C1E;
+    --surface-2: #2C2C2E;
+    --text: #F5F3F0;
+    --text-2: #98938E;
+    --text-3: #5E5A56;
+    --line: #2E2D2B;
+    --ember: #FF7A4A;
+    --ember-soft: #3A1F15;
+    --success: #30D158;
+    --warning: #FFB340;
+    --error: #FF453A;
+    --info: #409CFF;
+    --glass: rgba(30, 30, 32, 0.72);
+    --glass-line: rgba(255, 255, 255, 0.08);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .3);
+  }
+}

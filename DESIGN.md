@@ -4,10 +4,11 @@
 > Visual reference: `design-preview.html` (open in a browser; light/dark toggle top right).
 
 ## Product Context
-- **What this is:** 개인 일상 기록 서비스. 하루의 글, 사진, 장소, 기분을 짧게 남기고 다시 꺼내 읽는다.
-- **Who it's for:** 매일 혹은 자주 하루를 기록하고 싶은 개인 사용자.
-- **Space/industry:** Journaling / life log. Peers: Day One, Apple Journal, Journey.
-- **Project type:** Mobile-first web app (PWA). Desktop은 중앙 단일 컬럼.
+- **What this is:** 1인용 활동 기록. 지금 하는 일을 한 줄로 적고 시작/종료하면, 하루가 시간 블록으로 남는다. (스펙: `docs/superpowers/specs/2026-11-20-recordlife-design.md`)
+- **Who it's for:** 본인 한 명. 집 노트북에 띄우고 VPN으로 폰과 PC에서 접속.
+- **Space/industry:** Time log / life log. Peers: Day One, Apple Journal (톤), 타임 트래커들 (기능).
+- **Project type:** 반응형 웹앱 (폰 + 데스크톱). Desktop은 중앙 단일 컬럼.
+- **원칙:** 화면에 보이는 것은 최소한. 첫 화면은 입력칸 하나.
 
 ## Aesthetic Direction
 - **Direction:** Refined Minimal, Apple HIG 문법
@@ -79,7 +80,9 @@ Inputs는 iOS 자동 확대 방지를 위해 최소 16px.
 - **Approach:** grid-disciplined, iOS 문법 (Large Title → content → floating glass tab bar)
 - **Mobile:** 단일 컬럼, 좌우 여백 20px, 기준 폭 390px
 - **Desktop:** 중앙 컬럼 max-width 640px (읽기 본문은 max 600px, 약 32–36자/줄)
-- **Navigation:** 하단 floating glass 탭바(기록 · 캘린더 · 사진) + 우측 Ember FAB(+ 새 기록). 새 기록 작성은 바텀 시트.
+- **Navigation:** 상단 glass 바 하나. 좌측 워드마크, 우측 작은 세그먼트 `지금 · 일 · 월`. 하단 탭바와 FAB는 쓰지 않는다. 기록 수정은 바텀 시트.
+- **Day timeline:** 세로 24시간, 1시간 = 56px. 빈 시간은 여백 그대로.
+- **Month:** 7열 달력, 날마다 지름 32px 원. 진하기 = 기록 시간 5단계(Ember 0/25/50/75/100%).
 - **Lists:** Inset Grouped. 구분선은 0.5px, 아이콘/날짜 열 다음부터 시작.
 - **Border radius:** tag 6 · control 10 · button 14 · card 16 · sheet 24 · pill/tab bar 999
 - **Shadow:** `0 1px 2px rgba(28,27,26,.04), 0 8px 24px rgba(28,27,26,.06)` 한 단계만. 다크 모드에서는 그림자 대신 표면 밝기로 위계.
@@ -96,8 +99,10 @@ Inputs는 iOS 자동 확대 방지를 위해 최소 16px.
 - **Input:** surface-2 배경, 테두리 없음, 포커스 시 Ember 1.5px inset ring
 - **Segmented control:** surface-2 트랙 + surface 선택 칩
 - **Toggle:** iOS 51×31, on = success green
-- **Entry list row:** [날짜 숫자 + 요일] [세리프 제목 + 2줄 미리보기 + 태그] [58px 썸네일(선택)]
-- **Streak card:** Ember-soft 아이콘 + 주간 막대 7개
+- **Now:** 진행 중 활동 이름(세리프 26/600) + 타이머(tabular 56px/300, `H:MM:SS`) + `HH:mm 시작` + 종료 버튼(secondary). 아래 입력칸 + 시작 버튼(Ember).
+- **Time block:** surface 배경, `--line` 0.5px 테두리, radius 10, 이름 세리프 + `HH:mm–HH:mm`. 진행 중은 Ember 테두리. 현재 시각선 Ember 1px.
+- **Ember 사용처:** 시작 버튼, 진행 중 표시, 현재 시각선, 월별 원 진하기, 활성 포커스.
+- 일기 미리보기의 연속 기록 카드, 사진 썸네일, 기분 칩은 사용하지 않는다 (design-preview.html은 톤 참고용).
 
 ## Anti-patterns (하지 말 것)
 - 보라색/그라디언트 포인트, 그라디언트 버튼
@@ -110,4 +115,5 @@ Inputs는 iOS 자동 확대 방지를 위해 최소 16px.
 ## Decisions Log
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-11-20 | 제품을 활동 타이머로 전환, 내비게이션을 상단 세그먼트로 | 사용자가 "순간 기록 + 시간 블록" 서비스로 정의. 토큰은 유지, 화면 구성만 변경 |
 | 2026-11-20 | Initial design system created | /design-consultation. 개인 일상 기록, 모바일 우선 웹앱, "애플 느낌" 요청. Day One/Apple Journal 조사 후 애플 문법 + 세리프 본문 + 따뜻한 중립색으로 차별화 |
